@@ -60,10 +60,28 @@ Function Cleanup() {
 }
 
 Function Get-Extension() {
-    if($php -ne $nightly_version) {
-        git clone --branch=$branch $github/$repo.git $ext_dir
+    if ($repo -like "*pecl.php.net*") {
+        if($branch -eq 'latest') {
+            $content = [xml](Invoke-WebRequest -Uri "https://pecl.php.net/rest/r/$extension/allreleases.xml").Content
+            foreach($i in $content.a.r) { 
+                if($i.s -eq 'stable') { 
+                    $branch = $i.v; 
+                    break; 
+                }
+            }
+        }
+        New-Item "$ext_dir" -ItemType "directory" -Force > $null 2>&1
+        Invoke-WebRequest -Uri "https://pecl.php.net/get/$extension-$branch.tgz" -OutFile "$ext_dir\$extension-$branch.tgz" -UseBasicParsing
+        & tar -xzf "$ext_dir\$extension-$branch.tgz" -C $ext_dir
+        Copy-Item -Path "$ext_dir\$extension-$branch\*" -Destination $ext_dir -Recurse -Force
+        Remove-Item -Path "$ext_dir\$extension-$branch" -Recurse -Force
+        (Get-Content $ext_dir\config.w32) -replace '/sdl', '' | Set-Content $ext_dir\config.w32
     } else {
-        git clone --branch=$dev_branch $github/$repo.git $ext_dir
+        if($php -ne $nightly_version) {
+            git clone --branch=$branch $github/$repo.git $ext_dir
+        } else {
+            git clone --branch=$dev_branch $github/$repo.git $ext_dir
+        }
     }
 }
 

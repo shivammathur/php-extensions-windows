@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         php: ['8.0', '8.1', '8.2', '8.3', '8.4']
-        extensions: [pcov, xdebug]
+        extensions: [pcov, xdebug, sqlsrv, pdo_sqlsrv]
         sdk_version: [master]
         vs: [vs16]
         ts: [ts, nts]
@@ -28,6 +28,34 @@ jobs:
             branch: master
             dev_branch: master
             args: with-xdebug
+          - extensions: sqlsrv
+            repo: https://pecl.php.net/package/sqlsrv
+            branch: latest
+            dev_branch: latest
+            args: enable-sqlsrv
+          - extensions: pdo_sqlsrv
+            repo: https://pecl.php.net/package/pdo_sqlsrv
+            branch: latest
+            dev_branch: latest
+            args: with-pdo-sqlsrv
+          - extensions: sqlsrv
+            php: '8.0'
+            repo: https://pecl.php.net/package/sqlsrv
+            branch: '5.11.0'
+            dev_branch: '5.11.0'
+            args: enable-sqlsrv
+          - extensions: pdo_sqlsrv
+            php: '8.0'
+            repo: https://pecl.php.net/package/pdo_sqlsrv
+            branch: '5.11.0'
+            dev_branch: '5.11.0'
+            args: with-pdo-sqlsrv
+        exclude:
+          - extensions: sqlsrv
+            php: '8.4'
+          - extensions: pdo_sqlsrv
+            php: '8.4'
+
     steps:
     - uses: actions/checkout@v3
     - name: build
