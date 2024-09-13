@@ -57,7 +57,7 @@ jobs:
             php: '8.4'
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: build
       run: |
         pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
@@ -66,7 +66,7 @@ jobs:
           exit $exit_code
         }
     - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.extensions }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
@@ -74,9 +74,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: mkdir ext
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
       with:
         path: ext
     - name: Release
