@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.0', '8.1', '8.2', '8.3', '8.4']
+        php: ['8.0', '8.1', '8.2', '8.3']
         extensions: [pcov, xdebug, sqlsrv, pdo_sqlsrv]
         sdk_version: [master]
         vs: [vs16]
@@ -68,7 +68,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: vs16-${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
+        name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
   vs17:
     name: build
@@ -121,7 +121,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: vs17-${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
+        name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
   release:
     runs-on: ubuntu-latest
