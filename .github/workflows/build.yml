@@ -20,8 +20,8 @@ jobs:
         include:
           - extensions: pcov
             repo: krakjoe/pcov
-            branch: release
-            dev_branch: develop
+            branch: issue-php84
+            dev_branch: issue-php84
             args: enable-pcov
           - extensions: xdebug
             repo: shivammathur/xdebug
@@ -68,7 +68,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
+        name: vs16-${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
   vs17:
     name: build
@@ -85,8 +85,8 @@ jobs:
         include:
           - extensions: pcov
             repo: krakjoe/pcov
-            branch: release
-            dev_branch: develop
+            branch: issue-php84
+            dev_branch: issue-php84
             args: enable-pcov
           - extensions: xdebug
             repo: shivammathur/xdebug
@@ -133,7 +133,7 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
+        name: vs17-${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
   release:
     runs-on: ubuntu-latest
