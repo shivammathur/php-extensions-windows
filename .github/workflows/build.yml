@@ -50,11 +50,6 @@ jobs:
             branch: '5.11.0'
             dev_branch: '5.11.0'
             args: with-pdo-sqlsrv
-        exclude:
-          - extensions: sqlsrv
-            php: '8.4'
-          - extensions: pdo_sqlsrv
-            php: '8.4'
 
     steps:
     - uses: actions/checkout@v4
@@ -103,11 +98,6 @@ jobs:
             branch: latest
             dev_branch: latest
             args: with-pdo-sqlsrv
-        exclude:
-          - extensions: sqlsrv
-            php: '8.4'
-          - extensions: pdo_sqlsrv
-            php: '8.4'
 
     steps:
     - uses: actions/checkout@v4
