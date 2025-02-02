@@ -20,8 +20,8 @@ jobs:
         include:
           - extensions: pcov
             repo: krakjoe/pcov
-            branch: issue-php84
-            dev_branch: issue-php84
+            branch: develop
+            dev_branch: develop
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
@@ -85,8 +85,8 @@ jobs:
         include:
           - extensions: pcov
             repo: krakjoe/pcov
-            branch: issue-php84
-            dev_branch: issue-php84
+            branch: develop
+            dev_branch: develop
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
