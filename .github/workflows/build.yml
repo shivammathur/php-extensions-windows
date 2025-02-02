@@ -6,7 +6,7 @@ on:
     - cron: '30 0 * * *'
 jobs:
   vs16:
-    name: build
+    name: build_vs16
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -24,7 +24,7 @@ jobs:
             dev_branch: issue-php84
             args: enable-pcov
           - extensions: xdebug
-            repo: shivammathur/xdebug
+            repo: xdebug/xdebug
             branch: master
             dev_branch: master
             args: with-xdebug
@@ -71,7 +71,7 @@ jobs:
         name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
   vs17:
-    name: build
+    name: build_vs17
     runs-on: windows-2022
     strategy:
       fail-fast: false
@@ -89,7 +89,7 @@ jobs:
             dev_branch: issue-php84
             args: enable-pcov
           - extensions: xdebug
-            repo: shivammathur/xdebug
+            repo: xdebug/xdebug
             branch: master
             dev_branch: master
             args: with-xdebug
