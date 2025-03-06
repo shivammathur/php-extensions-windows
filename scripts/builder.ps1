@@ -59,6 +59,32 @@ Function Cleanup() {
     New-Item -Path $cache_dir -ItemType "directory"
 }
 
+Function Get-LatestGitTag() {
+    param (
+        [Parameter(Position = 0, Mandatory = $true)]
+        [ValidateNotNull()]
+        [ValidateLength(1, [int]::MaxValue)]
+        [string]
+        $repo
+    )
+    $lsRemoteOutput = git ls-remote --tags $repo 2>&1
+    $versionTags = @()
+    foreach ($line in $lsRemoteOutput -split "`n") {
+        $line = $line.Trim()
+        if (-not $line) { continue }
+        $match = [regex]::Match($line, '\d+\.\d+(?:\.\d+)?(?:\.\d+)?')
+        if ($match.Success) {
+            $versionObj = [version]$match.Value
+            $versionTags += [PSCustomObject]@{
+                Tag     = $match.Value
+                Version = $versionObj
+            }
+        }
+    }
+
+    return ($versionTags | Sort-Object Version -Descending | Select-Object -First 1).Tag
+}
+
 Function Get-Extension() {
     if ($repo -like "*pecl.php.net*") {
         if($branch -eq 'latest') {
@@ -76,8 +102,11 @@ Function Get-Extension() {
         Copy-Item -Path "$ext_dir\$extension-$branch\*" -Destination $ext_dir -Recurse -Force
         Remove-Item -Path "$ext_dir\$extension-$branch" -Recurse -Force
         (Get-Content $ext_dir\config.w32) -replace '/sdl', '' | Set-Content $ext_dir\config.w32
-    } else {
+    } else {        
         if($php -ne $nightly_version) {
+            if($branch -eq 'latest_stable_tag') {
+                $branch = Get-LatestGitTag $github/$repo.git
+            }
             git clone --branch=$branch $github/$repo.git $ext_dir
         } else {
             git clone --branch=$dev_branch $github/$repo.git $ext_dir

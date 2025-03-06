@@ -25,7 +25,7 @@ jobs:
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
-            branch: master
+            branch: latest_stable_tag
             dev_branch: master
             args: with-xdebug
           - extensions: sqlsrv
@@ -85,7 +85,7 @@ jobs:
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
-            branch: master
+            branch: latest_stable_tag
             dev_branch: master
             args: with-xdebug
           - extensions: sqlsrv
