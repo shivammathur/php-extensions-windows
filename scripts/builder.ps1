@@ -197,6 +197,32 @@ Function Get-PHPBranch() {
     return $php_branch
 }
 
+Function Get-VSToolset() {
+    $toolsets = @{
+        "vc14" = "14.0"
+    }
+    $MSVCDirectory = vswhere -latest -products * -find "VC\Tools\MSVC"
+    foreach ($toolset in (Get-ChildItem $MSVCDirectory)) {
+        $major, $minor = $toolset.Name.split(".")[0,1]
+        if(14 -eq $major) {
+            if (9 -ge $minor) {
+                $toolsets."vc14" = $toolset
+            } elseif (19 -ge $minor) {
+                $toolsets."vc15" = $toolset
+            } elseif (29 -ge $minor) {
+                $toolsets."vs16" = $toolset
+            } else {
+                $toolsets."vs17" = $toolset
+            }
+        }
+    }
+    $toolset = $toolsets.$vs
+    if (-not $toolset) {
+        throw "No toolset found for $vs"
+    }
+    return $toolset.Name
+}
+
 Function Build-Extension() {
     $ts_path = Get-TSPath
     $package_zip = "php-devel-pack-$php_version$ts_path-Win32-$vs-$arch.zip"
@@ -210,7 +236,7 @@ Function Build-Extension() {
     $env:PATH = "$cache_dir\$package_dir;$env:PATH"
     $builder = "$cache_dir\php-sdk-$sdk_version\phpsdk-$vs-$arch.bat"
     $task = (Get-Item -Path "." -Verbose).FullName + '\task.bat'
-    & $builder -t $task
+    & $builder -s (Get-VSToolset) -t $task
 }
 
 Function Copy-Extension() {
