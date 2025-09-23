@@ -18,31 +18,36 @@ param (
     [ValidateNotNull()]
     [ValidateLength(1, [int]::MaxValue)]
     [string]
-    $dev_branch,
+    $dev_repo,
     [Parameter(Position = 4, Mandatory = $true)]
     [ValidateNotNull()]
     [ValidateLength(1, [int]::MaxValue)]
     [string]
-    $config_args,
+    $dev_branch,
     [Parameter(Position = 5, Mandatory = $true)]
     [ValidateNotNull()]
     [ValidateLength(1, [int]::MaxValue)]
     [string]
-    $sdk_version,
+    $config_args,
     [Parameter(Position = 6, Mandatory = $true)]
     [ValidateNotNull()]
     [ValidateLength(1, [int]::MaxValue)]
     [string]
-    $vs,
+    $sdk_version,
     [Parameter(Position = 7, Mandatory = $true)]
     [ValidateNotNull()]
     [ValidateLength(1, [int]::MaxValue)]
     [string]
+    $vs,
+    [Parameter(Position = 8, Mandatory = $true)]
+    [ValidateNotNull()]
+    [ValidateLength(1, [int]::MaxValue)]
+    [string]
     $arch,
-    [Parameter(Position = 8, Mandatory = $false)]
+    [Parameter(Position = 9, Mandatory = $false)]
     [string]
     $ts,
-    [Parameter(Position = 9, Mandatory = $true)]
+    [Parameter(Position = 10, Mandatory = $true)]
     [ValidateNotNull()]
     [ValidateLength(1, [int]::MaxValue)]
     [string]
@@ -104,7 +109,7 @@ Function Get-Extension() {
         (Get-Content $ext_dir\config.w32) -replace '/sdl', '' | Set-Content $ext_dir\config.w32
     } else {        
         if($php -match $dev_branch_versions) {
-            git clone --branch=$dev_branch $github/$repo.git $ext_dir
+            git clone --branch=$dev_branch $github/$dev_repo.git $ext_dir
         } else {
             if($branch -eq 'latest_stable_tag') {
                 $branch = Get-LatestGitTag $github/$repo.git

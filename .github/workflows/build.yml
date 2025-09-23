@@ -21,33 +21,39 @@ jobs:
           - extensions: pcov
             repo: krakjoe/pcov
             branch: release
+            dev_repo: krakjoe/pcov
             dev_branch: release
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
             branch: latest_stable_tag
+            dev_repo: xdebug/xdebug
             dev_branch: master
             args: with-xdebug
           - extensions: sqlsrv
             repo: https://pecl.php.net/package/sqlsrv
             branch: latest
+            dev_repo: https://pecl.php.net/package/sqlsrv
             dev_branch: latest
             args: enable-sqlsrv
           - extensions: pdo_sqlsrv
             repo: https://pecl.php.net/package/pdo_sqlsrv
             branch: latest
+            dev_repo: https://pecl.php.net/package/pdo_sqlsrv
             dev_branch: latest
             args: with-pdo-sqlsrv
           - extensions: sqlsrv
             php: '8.0'
             repo: https://pecl.php.net/package/sqlsrv
             branch: '5.11.0'
+            dev_repo: https://pecl.php.net/package/sqlsrv
             dev_branch: '5.11.0'
             args: enable-sqlsrv
           - extensions: pdo_sqlsrv
             php: '8.0'
             repo: https://pecl.php.net/package/pdo_sqlsrv
             branch: '5.11.0'
+            dev_repo: https://pecl.php.net/package/pdo_sqlsrv
             dev_branch: '5.11.0'
             args: with-pdo-sqlsrv
 
@@ -55,7 +61,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: build
       run: |
-        pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
+        pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_repo }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
         $exit_code = $?
         if(-not($exit_code)) {
           exit $exit_code
@@ -81,21 +87,25 @@ jobs:
           - extensions: pcov
             repo: krakjoe/pcov
             branch: release
+            dev_repo: krakjoe/pcov
             dev_branch: release
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
             branch: latest_stable_tag
-            dev_branch: master
+            dev_repo: shivammathur/xdebug
+            dev_branch: allow-8.6
             args: with-xdebug
           - extensions: sqlsrv
             repo: https://pecl.php.net/package/sqlsrv
             branch: latest
+            dev_repo: https://pecl.php.net/package/sqlsrv
             dev_branch: latest
             args: enable-sqlsrv
           - extensions: pdo_sqlsrv
             repo: https://pecl.php.net/package/pdo_sqlsrv
             branch: latest
+            dev_repo: https://pecl.php.net/package/pdo_sqlsrv
             dev_branch: latest
             args: with-pdo-sqlsrv
 
@@ -103,7 +113,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: build
       run: |
-        pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
+        pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_repo }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
         $exit_code = $?
         if(-not($exit_code)) {
           exit $exit_code
