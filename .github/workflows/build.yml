@@ -20,8 +20,8 @@ jobs:
         include:
           - extensions: pcov
             repo: krakjoe/pcov
-            branch: develop
-            dev_branch: develop
+            branch: release
+            dev_branch: release
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
@@ -80,8 +80,8 @@ jobs:
         include:
           - extensions: pcov
             repo: krakjoe/pcov
-            branch: develop
-            dev_branch: develop
+            branch: release
+            dev_branch: release
             args: enable-pcov
           - extensions: xdebug
             repo: xdebug/xdebug
