@@ -103,13 +103,13 @@ Function Get-Extension() {
         Remove-Item -Path "$ext_dir\$extension-$branch" -Recurse -Force
         (Get-Content $ext_dir\config.w32) -replace '/sdl', '' | Set-Content $ext_dir\config.w32
     } else {        
-        if($php -ne $nightly_version) {
+        if($php -match $dev_branch_versions) {
+            git clone --branch=$dev_branch $github/$repo.git $ext_dir
+        } else {
             if($branch -eq 'latest_stable_tag') {
                 $branch = Get-LatestGitTag $github/$repo.git
             }
-            git clone --branch=$branch $github/$repo.git $ext_dir
-        } else {
-            git clone --branch=$dev_branch $github/$repo.git $ext_dir
+            git clone --branch=$branch $github/$repo.git $ext_dir            
         }
     }
 }
@@ -258,6 +258,7 @@ $cache_dir = "C:\build-cache"
 $ext_dir = "C:\projects\$extension"
 $github = "https://github.com"
 $trunk = "$github/shivammathur/php-builder-windows/releases/download/php$php"
+$dev_branch_versions = '8.[5-6]'
 $nightly_version = Invoke-RestMethod "https://raw.githubusercontent.com/php/php-src/master/main/php_version.h" | Where-Object { $_ -match '(\d+\.\d+)\.' } | Foreach-Object {$Matches[1]}
 $php_branch = Get-PHPBranch
 $php_version = Invoke-RestMethod "https://raw.githubusercontent.com/php/php-src/$php_branch/main/php_version.h" | Where-Object { $_  -match 'PHP_VERSION "(.*)"' } | Foreach-Object {$Matches[1]}
