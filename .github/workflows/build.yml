@@ -93,8 +93,8 @@ jobs:
           - extensions: xdebug
             repo: xdebug/xdebug
             branch: latest_stable_tag
-            dev_repo: shivammathur/xdebug
-            dev_branch: allow-8.6
+            dev_repo: xdebug/xdebug
+            dev_branch: master
             args: with-xdebug
           - extensions: sqlsrv
             repo: https://pecl.php.net/package/sqlsrv

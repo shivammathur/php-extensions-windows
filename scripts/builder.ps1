@@ -105,8 +105,7 @@ Function Get-Extension() {
         Invoke-WebRequest -Uri "https://pecl.php.net/get/$extension-$branch.tgz" -OutFile "$ext_dir\$extension-$branch.tgz" -UseBasicParsing
         & tar -xzf "$ext_dir\$extension-$branch.tgz" -C $ext_dir
         Copy-Item -Path "$ext_dir\$extension-$branch\*" -Destination $ext_dir -Recurse -Force
-        Remove-Item -Path "$ext_dir\$extension-$branch" -Recurse -Force
-        (Get-Content $ext_dir\config.w32) -replace '/sdl', '' | Set-Content $ext_dir\config.w32
+        Remove-Item -Path "$ext_dir\$extension-$branch" -Recurse -Force        
     } else {        
         if($php -match $dev_branch_versions) {
             git clone --branch=$dev_branch $github/$dev_repo.git $ext_dir
@@ -116,6 +115,10 @@ Function Get-Extension() {
             }
             git clone --branch=$branch $github/$repo.git $ext_dir            
         }
+    }
+    $patch = Join-Path (Split-Path -Parent $PSScriptRoot) "patches/$extension.ps1"
+    if(Test-Path $patch) {
+        & $patch -php $php -path $ext_dir
     }
 }
 
