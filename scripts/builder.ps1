@@ -77,7 +77,7 @@ Function Get-LatestGitTag() {
     foreach ($line in $lsRemoteOutput -split "`n") {
         $line = $line.Trim()
         if (-not $line) { continue }
-        $match = [regex]::Match($line, '\d+\.\d+(?:\.\d+)?(?:\.\d+)?')
+        $match = [regex]::Match($line, '\d+\.\d+(?:\.\d+)?(?:\.\d+)$')
         if ($match.Success) {
             $versionObj = [version]$match.Value
             $versionTags += [PSCustomObject]@{
