@@ -7,6 +7,15 @@ param(
 
 if($php -match '8.6') {
     (Get-Content "$path\config.w32" -Raw) -replace ([regex]::Escape('80600')), '80700' | Set-Content "$path\config.w32" -Encoding UTF8
+    $profiler = "$path\src\profiler\profiler.c"
+    $content = Get-Content $profiler -Raw -Encoding UTF8
+    $patched = [regex]::Replace(
+    $content,
+    'ZSTR_INIT_LITERAL\s*\(\s*tmp_name\s*,\s*(?:false|0)\s*\)\s*;',
+    'zend_string_init(tmp_name, strlen(tmp_name), 0);'
+    )
+
+    if ($patched -ne $content) { Set-Content $profiler -Value $patched -Encoding UTF8 }
 }
 
 if($php -match '8.[5-6]') {
