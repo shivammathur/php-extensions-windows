@@ -16,7 +16,16 @@ if($php -match '8.6') {
     )
 
     if ($patched -ne $content) { Set-Content $profiler -Value $patched -Encoding UTF8 }
-    (Get-Content "$path\src\develop\php_functions.c" -Raw) -replace ([regex]::Escape('WRONG_PARAM_COUNT;')), 'zend_wrong_param_count();RETURN_THROWS();' | Set-Content "$path\src\develop\php_functions.c" -Encoding UTF8    
+    (Get-Content "$path\src\develop\php_functions.c" -Raw) -replace ([regex]::Escape('WRONG_PARAM_COUNT;')), 'zend_wrong_param_count();RETURN_THROWS();' | Set-Content "$path\src\develop\php_functions.c" -Encoding UTF8
+    $zval_dtor_files = @(
+        "src/debugger/debugger.c",
+        "src/debugger/handler_dbgp.c",
+        "src/base/base.c"
+    )
+    foreach ($file in $zval_dtor_files) {
+        $fullPath = Join-Path $path $file
+        (Get-Content -Raw $fullPath) -replace 'zval_dtor', 'zval_ptr_dtor_nogc' | Set-Content $fullPath
+    }
 }
 
 if($php -match '8.[5-6]') {
