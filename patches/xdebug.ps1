@@ -16,6 +16,7 @@ if($php -match '8.6') {
     )
 
     if ($patched -ne $content) { Set-Content $profiler -Value $patched -Encoding UTF8 }
+    (Get-Content "$path\src\develop\php_functions.c" -Raw) -replace ([regex]::Escape('WRONG_PARAM_COUNT;')), 'zend_wrong_param_count();RETURN_THROWS();' | Set-Content "$path\src\develop\php_functions.c" -Encoding UTF8    
 }
 
 if($php -match '8.[5-6]') {
