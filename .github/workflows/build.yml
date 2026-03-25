@@ -58,7 +58,7 @@ jobs:
             args: with-pdo-sqlsrv
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: build
       run: |
         pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_repo }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
@@ -67,7 +67,7 @@ jobs:
           exit $exit_code
         }
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
@@ -110,7 +110,7 @@ jobs:
             args: with-pdo-sqlsrv
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: build
       run: |
         pwsh scripts/builder.ps1 ${{ matrix.extensions }} ${{ matrix.repo }} ${{ matrix.branch }} ${{ matrix.dev_repo }} ${{ matrix.dev_branch }} ${{ matrix.args }} ${{ matrix.sdk_version }} ${{ matrix.vs }} ${{ matrix.arch }} ${{ matrix.ts }} ${{ matrix.php }}
@@ -119,7 +119,7 @@ jobs:
           exit $exit_code
         }
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.extensions }}_${{ matrix.php }}_${{ matrix.ts }}_${{ matrix.arch }}
         path: ${{ matrix.extensions }}
@@ -127,9 +127,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [vs16, vs17]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - run: mkdir ext
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         path: ext
     - name: Release
