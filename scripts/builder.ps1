@@ -219,8 +219,10 @@ Function Get-VSToolset() {
                 $toolsets."vc15" = $toolset
             } elseif (29 -ge $minor) {
                 $toolsets."vs16" = $toolset
-            } else {
+            } elseif (49 -ge $minor) {
                 $toolsets."vs17" = $toolset
+            } else {
+                $toolsets."vs18" = $toolset
             }
         }
     }
