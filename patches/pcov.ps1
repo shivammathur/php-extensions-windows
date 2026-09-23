@@ -5,7 +5,7 @@ param(
   [string]$path
 )
 
-if($php -match '8\.6') {
+if($php -match '^8\.[6-7]$') {
     $pcov = Get-Content "$path\pcov.c" -Raw
     $pcov = $pcov -replace ([regex]::Escape('INI_BOOL("pcov.enabled")')), 'zend_ini_bool_literal("pcov.enabled")'
     $pcov = $pcov -replace ([regex]::Escape('INI_INT("pcov.initial.memory")')), 'zend_ini_long_literal("pcov.initial.memory")'

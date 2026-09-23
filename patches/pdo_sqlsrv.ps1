@@ -5,8 +5,11 @@ param(
   [string]$path
 )
 
-if($php -match '8.[5-6]') {
-    (Get-Content "$path\php_pdo_sqlsrv_int.h" -Raw) -replace ([regex]::Escape('zval_ptr_dtor( &dbh->query_stmt_zval );')), 'OBJ_RELEASE(dbh->query_stmt_obj);dbh->query_stmt_obj = NULL;' | Set-Content "$path\php_pdo_sqlsrv_int.h" -Encoding UTF8
-    (Get-Content "$path\pdo_dbh.cpp" -Raw) -replace ([regex]::Escape('pdo_error_mode prev_err_mode')), 'uint8_t prev_err_mode' | Set-Content "$path\pdo_dbh.cpp" -Encoding UTF8
+if($php -match '^8\.[6-7]$') {
+    $stream = Get-Content "$path\shared\core_stream.cpp" -Raw
+    $stream = $stream -replace ([regex]::Escape('php_stream_context* STREAMS_DC')), 'php_stream_context* context STREAMS_DC'
+    $stream = $stream -replace ([regex]::Escape('php_stream_wrapper_log_error(wrapper, options,')), 'php_stream_wrapper_log_warn(wrapper, context, options, InvalidParam,'
+    $stream | Set-Content "$path\shared\core_stream.cpp" -Encoding UTF8 -NoNewline
 }
+
 (Get-Content $path\config.w32) -replace '/sdl', '' | Set-Content $path\config.w32

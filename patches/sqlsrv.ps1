@@ -5,7 +5,7 @@ param(
   [string]$path
 )
 
-if($php -match '8\.6') {
+if($php -match '^8\.[6-7]$') {
     $init = Get-Content "$path\init.cpp" -Raw
     $init = $init -replace ([regex]::Escape('SQLSRV_G( warnings_return_as_errors ) = INI_BOOL( warnings_as_errors );')), 'SQLSRV_G( warnings_return_as_errors ) = zend_ini_parse_bool(zend_ini_str(warnings_as_errors, sizeof(warnings_as_errors) - 1, false));'
     $init = $init -replace ([regex]::Escape('SQLSRV_G( log_severity ) = INI_INT( severity );')), 'SQLSRV_G( log_severity ) = zend_ini_long(severity, sizeof(severity) - 1, false);'
@@ -13,6 +13,11 @@ if($php -match '8\.6') {
     $init = $init -replace ([regex]::Escape('SQLSRV_G( buffered_query_limit ) = INI_INT( buffered_limit );')), 'SQLSRV_G( buffered_query_limit ) = zend_ini_long(buffered_limit, sizeof(buffered_limit) - 1, false);'
     $init = $init -replace ([regex]::Escape('SQLSRV_G(set_locale_info) = INI_INT(set_locale_info);')), 'SQLSRV_G(set_locale_info) = zend_ini_long(set_locale_info, sizeof(set_locale_info) - 1, false);'
     $init | Set-Content "$path\init.cpp" -Encoding UTF8
+
+    $stream = Get-Content "$path\shared\core_stream.cpp" -Raw
+    $stream = $stream -replace ([regex]::Escape('php_stream_context* STREAMS_DC')), 'php_stream_context* context STREAMS_DC'
+    $stream = $stream -replace ([regex]::Escape('php_stream_wrapper_log_error(wrapper, options,')), 'php_stream_wrapper_log_warn(wrapper, context, options, InvalidParam,'
+    $stream | Set-Content "$path\shared\core_stream.cpp" -Encoding UTF8 -NoNewline
 }
 
 (Get-Content $path\config.w32) -replace '/sdl', '' | Set-Content $path\config.w32
