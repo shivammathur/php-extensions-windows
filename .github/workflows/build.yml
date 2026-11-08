@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '30 0 * * *'
+permissions:
+  contents: read
 jobs:
   vs16:
     name: build_vs16
@@ -170,6 +172,8 @@ jobs:
         path: ${{ matrix.extensions }}
         if-no-files-found: error
   release:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     needs: [vs16, vs17, vs18]
     steps:
@@ -179,16 +183,9 @@ jobs:
       with:
         path: ext
     - name: Release
-      run: |
-        set -x
-        assets=()
-        for asset in ./ext/*/*.dll; do
-          assets+=("$asset")
-        done
-        if ! gh release view builds; then
-          gh release create "builds" "${assets[@]}" -t "builds" -n "builds"
-        else
-          gh release upload "builds" "${assets[@]}" --clobber
-        fi
+      run: bash scripts/release.sh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.CF_R2_AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.CF_R2_AWS_SECRET_ACCESS_KEY }}
+        CF_R2_AWS_S3_ENDPOINT: ${{ secrets.CF_R2_AWS_S3_ENDPOINT }}
