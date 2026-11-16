@@ -16,7 +16,7 @@ if ! command -v aws >/dev/null 2>&1; then
 fi
 
 for asset in "${assets[@]}"; do
-  aws --endpoint-url "$CF_R2_AWS_S3_ENDPOINT" s3 cp "$asset" \
+  aws --region auto --endpoint-url "$CF_R2_AWS_S3_ENDPOINT" s3 cp "$asset" \
     "s3://php-extensions-windows/$(basename "$asset")" \
     --cache-control 'public, max-age=300' --only-show-errors
 done
