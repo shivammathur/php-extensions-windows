@@ -21,8 +21,8 @@ if($php -match '^8\.[6-7]$') {
 }
 
 if($php -eq '8.7') {
-    # Include child_init_func and keep the module properties positional for C++.
-    (Get-Content "$path\init.cpp") -replace 'STANDARD_MODULE_PROPERTIES_EX', 'NULL, 0, 0, NULL, 0, ZEND_MODULE_BUILD_ID' | Set-Content "$path\init.cpp"
+    # Include child_init_func and explicitly cast the module type for C++.
+    (Get-Content "$path\init.cpp") -replace 'STANDARD_MODULE_PROPERTIES_EX', 'NULL, 0, static_cast<zend_module_type>(0), NULL, 0, ZEND_MODULE_BUILD_ID' | Set-Content "$path\init.cpp"
 }
 
 (Get-Content $path\config.w32) -replace '/sdl', '' | Set-Content $path\config.w32
