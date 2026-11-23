@@ -10,4 +10,9 @@ if($php -match '^8\.7$') {
     $config = $config -replace 'XDEBUG_PHP_VERSION >= 80700', 'XDEBUG_PHP_VERSION >= 80800'
     $config = $config -replace '< 8\.7\.0', '< 8.8.0'
     $config | Set-Content "$path\config.w32" -Encoding UTF8 -NoNewline
+
+    $sourcePath = Join-Path $path 'src/lib/usefulstuff.c'
+    $source = Get-Content $sourcePath -Raw
+    $source.Replace('#include "ext/standard/flock_compat.h"', '#include "main/flock_compat.h"') |
+        Set-Content $sourcePath -Encoding UTF8 -NoNewline
 }
